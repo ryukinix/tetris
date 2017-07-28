@@ -1,0 +1,173 @@
+#+STARTUP: align hidestars
+
+* Tetris Game
+Bem, estou seguindo um tutorial encontrado [[https://noobtuts.com/unity/2d-tetris-game/][aqui]]
+O tutorial prepara o usuário para criar um clone do game tetris.
+
+Estarei guardando as principais informações do que achar relevante
+nesse documento.
+
+** UI
+*** Câmera Principal
+
+A primeira atividade é setar posição, cor de background e tamanho.
+
+Posição (x,y,z): (4.5, 7.5, -10)
+Cor de background: preto.
+Tamanho: 8.
+
+Uma nota: é importante que a câmera esteja definida em x=4.5 porque
+isso será o centro da cena futuramente.
+
+*** Blocos e Grupos
+
+Blocos são definidos como um objeto elementar, enquanto um grupo
+é um objeto composto de blocos.
+
+Há vários tipos de grupos no tetris e apenas um bloco. O bloco é apenas
+um quadrado e os grupos são as peças: I, J, L, O, S, T, Z.
+
+*** Importando os assets
+
+Os assets do jogo são automaticamente carregados e colocados na pasta default
+~Assets~.
+
+Dois blocks de assets são importados, a borda e o bloco para as pelas, com as seguintes configurações personalizadas:
+
+- Pixels To Units: 32
+- Pivot: Center
+- Max Size: 1024
+
+*** Definindo as bordas
+
+As bordas do jogo limitarão até onde o jogador pode posicionar as peças, então
+é uma parte importante do jogo também. A cena de um jogo tetris tem exatamente 10 blocos
+de largura e 20 de altura. Então as coordenadas dos blocos serão sempre (0,0) a (9,19).
+
+Nota: se você contar isso, verá que 10 unidades horizontais e 20 unidades verticais,
+começando com 0.
+
+É necessário criar duas bordas laterais, com as seguintes configurações:
+
+| border-left |    X |  Y | Z |
+|-------------+------+----+---|
+| position    | -0.5 | 10 | 0 |
+| scale       |    1 | 40 | 1 |
+
+| border-right |   X |  Y | Z |
+|--------------+-----+----+---|
+| position     | 9.5 | 10 | 0 |
+| scale        |   1 | 40 | 1 |
+
+*** Criando os grupos
+
+É necessário criar os grupos de blocos do tetris. Ao todo são 7 blocos, nomeados:
+I, J, L, O, S, T e Z.
+
+Para cada bloco, cria-se primeiramente um /GameObject/ vazio então agrupa-se quatro blocos
+do asset /block.png/. Definindo em coordenadas discretas, centrado em posições que
+possam rotacionar em (0,0) assim como esperado do jogo, cria-se todos os /Prefabs/ dos grupos.
+
+Em geral as posições pra cada bloco do grupo são:
+
+                    | Group | B1     | B2      | B3      | B4       |
+                    |-------+--------+---------+---------+----------|
+                    | I     | (0, 0) | (0,  1) | (0, -1) | ( 0, -2) |
+                    | J     | (0, 0) | (0, -1) | (0, -2) | (-1, -2) |
+                    | L     | (0, 0) | (0, -1) | (0, -2) | ( 1,  2) |
+                    | O     | (0, 0) | (0, -1) | (-1, 0) | (-1, -1) |
+                    | S     | (0, 0) | (1, 0)  | (0, -1) | (-1, -1) |
+                    | T     | (0, 0) | (0, -1) | (1, 0)  | (-1,  0) |
+                    | Z     | (0, 0) | (-1, 0) | (0, -1) | (-1, -1) |
+
+
+
+** Programming
+
+*** DONE Spawner
+    CLOSED: [2017-07-28 sex 10:26]
+
+O Spawner será responsável por criar um objeto dinamicamente a cada vez que
+o usuário terminar de alocar um bloco. No tetris é onde é gerado cada novo
+bloco, geralmente na parte central superior da cena.
+
+Primeiro, cria-se um /GameObject/ vazio e nomea-se como /Spawner/. Similarmente,
+cria-se um script em C# com essas seguintes configurações:
+
+#+BEGIN_SRC C++ | eu sei, não é C++... mas deixa só pra ficar bonitinho
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Spawner : MonoBehaviour {
+
+        // onde serão anexados todos os prefabs do jogo
+        public GameObject[] groups;
+        // Use this for initialization
+        void Start () {
+                spawnNext ();
+        }
+
+        // Update is called once per frame
+        void Update () {
+
+        }
+
+        // spawnNext group block
+        public void spawnNext() {
+                // random index
+                int i = Random.Range(0, groups.Length);
+
+                // Spawn Group at current Position
+                Instantiate (groups [i],
+                             transform.position,
+                             Quaternion.identity);
+
+        }
+}
+
+
+#+END_SRC
+
+*** TODO Grid :docs:
+
+*** TODO Group :docs:
+
+*** TODO Music :docs:
+
+*** TODO NextSpawner :docs:
+
+
+* IN-PROGRESS Roadmap [66%]
+
+- [X] Criar Layout [3/3]
+  - [X] Câmera Principal
+  - [X] Bordas
+  - [X] Cena Principal
+- [X] Criar Prefabs [2/2]
+  - [X] Bloco principal
+  - [X] Grupos [7/7]
+    - [X] I
+    - [X] O
+    - [X] J
+    - [X] L
+    - [X] T
+    - [X] S
+    - [X] Z
+- [X] Criar Scripts Básicos [4/4]
+  - [X] Spawner
+  - [X] Grid Class
+  - [X] Grid Script
+  - [X] Group Script
+- [X] Criar Music script [1/1]
+  - [X] Inserir BGM com temas aleatórios 1 e 2
+- [X] Score
+- [X] Level
+- [ ] Menus [0/3]
+  - [ ] Início
+  - [ ] Pausa
+  - [ ] Game over
+- [-] Mostrar próximo bloco [1/2]
+  - [X] UI
+  - [ ] Script
+- [ ] Adicionar ação na tecla ESPAÇO para o bloco descer até o final subitamente
