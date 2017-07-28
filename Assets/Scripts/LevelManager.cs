@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour {
 
-    public static int level = 1;
+    public static int level;
 
     Text levelText;
 
@@ -14,9 +14,13 @@ public class LevelManager : MonoBehaviour {
         levelText = GetComponent<Text>();
     }
 
+    void Start() {
+        level = 1;
+    }
+
     // Update is called once per frame
     void Update () {
-        if (ScoreManager.score > level * 1000) {
+        if (ScoreManager.score >= level * 1000) {
             level += 1;
         }
         levelText.text = level.ToString();

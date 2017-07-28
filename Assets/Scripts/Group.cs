@@ -10,8 +10,6 @@ public class Group : MonoBehaviour {
     private float lastFall = 0;
     private float lastKeyDown = 0;
 
-    /// control if the user can generate a new block 
-    public static bool died = false;
 
     bool isValidGridPos() {
         foreach (Transform child in transform) {
@@ -51,13 +49,20 @@ public class Group : MonoBehaviour {
         }
     }
 
+    void gameOver() {
+        Debug.Log("GAME OVER!");
+        transform.position += new Vector3(0, 1, 0); // up one line
+        updateGrid(); // just intersect the last position
+        enabled = false; // disable script
+        GameOver.finish(); // print Game Over and set finished=true
+        //Music.stopMusic(); // stop Music
+    }
+
 	// Use this for initialization
 	void Start () {
         // default position not valid? then it's game over
         if (!isValidGridPos()) {
-            Debug.Log("GAME OVER!");
-            updateGrid();
-            died = true;
+            gameOver();
         }
 	}
 
@@ -73,6 +78,37 @@ public class Group : MonoBehaviour {
             transform.position -= v;
         }
     }
+
+    void fallGroup() {
+
+        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            lastKeyDown =  Time.time;
+        }
+
+        // modify
+        transform.position += new Vector3(0, -1, 0);
+
+        if (isValidGridPos()){
+            // It's valid. Update grid... again
+            updateGrid();
+        } else {
+            // it's not valid. rvert
+            transform.position += new Vector3(0, 1, 0);
+
+            // Clear filled horizontal lines
+            Grid.deleteFullRows();
+
+            // Spawn next Group if not died
+            FindObjectOfType<Spawner>().spawnNext();
+
+            // Disable script
+            enabled = false;
+        }
+
+        lastFall = Time.time;
+    
+    
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -85,43 +121,21 @@ public class Group : MonoBehaviour {
             transform.Rotate(0, 0, -90);
 
             // see if valid
-            if (isValidGridPos()){
+            if (isValidGridPos()) {
                 // it's valid. Update grid
                 updateGrid();
             } else {
                 // it's not valid. revert
                 transform.Rotate(0, 0, 90);
             }
-        } else if (Input.GetKeyDown(KeyCode.DownArrow) 
-                   || Input.GetKey(KeyCode.DownArrow) && Time.time - lastKeyDown > 0.75 &&  Time.time - lastFall > .05
-                   || (Time.time - lastFall) >= (float) 1/Mathf.Sqrt(LevelManager.level)) {
-            if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                lastKeyDown =  Time.time;
+        } else if (Input.GetKeyDown(KeyCode.DownArrow)
+                   || Input.GetKey(KeyCode.DownArrow) && Time.time - lastKeyDown > 0.75 && Time.time - lastFall > .05
+                   || (Time.time - lastFall) >= (float)1 / Mathf.Sqrt(LevelManager.level)) {
+            fallGroup();
+        } else if (Input.GetKeyDown(KeyCode.Space)) {
+            while (enabled) { // fall until the bottom 
+                fallGroup();
             }
-
-            // modify
-            transform.position += new Vector3(0, -1, 0);
-
-            if (isValidGridPos()){
-                 // It's valid. Update grid... again
-                updateGrid();
-            } else {
-                // it's not valid. rvert
-                transform.position += new Vector3(0, 1, 0);
-
-                // Clear filled horizontal lines
-                Grid.deleteFullRows();
-
-                // Spawn next Group if not died
-                if (!died) {
-                    FindObjectOfType<Spawner>().spawnNext();
-                }
-
-                // Disable script
-                enabled = false;
-            }
-
-            lastFall = Time.time;
         }
 
 	}

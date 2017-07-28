@@ -74,6 +74,7 @@ public class Grid : MonoBehaviour {
             if (isRowFull(y)) {
                 deleteRow(y);
                 decreaseRowAbove(y + 1);
+                // add new points to score when a row is deleted
                 ScoreManager.score += (h - y) * 10;
                 --y;
                 // NOTE: --y decreases y by one whenever a row was deleted.

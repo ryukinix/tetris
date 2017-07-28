@@ -5,28 +5,27 @@ using UnityEngine;
 public class Spawner : MonoBehaviour {
 
 	public GameObject[] groups;
-    public static int nextId;
+    public int nextId;
 
 	// Use this for initialization
 	void Start () {
-		spawnNext ();
         nextId = Random.Range(0, groups.Length);
+        spawnNext ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		// nothing
 	}
 
-    public GameObject createBlock(int i, Vector3 v) {
-        return Instantiate(groups[i], v, Quaternion.identity);
+    public GameObject createGroup(Vector3 v) {
+        return Instantiate(groups[nextId], v, Quaternion.identity);
     }
 
 	// spawnNext group block
 	public void spawnNext() {
 		// Spawn Group at current Position
-        createBlock(nextId, transform.position);
-	   
+        createGroup(transform.position);
         nextId = Random.Range(0, groups.Length);
 	}
 }
