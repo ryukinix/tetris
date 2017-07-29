@@ -88,8 +88,11 @@ public class Group : MonoBehaviour {
 
     void gameOver() {
         Debug.Log("GAME OVER!");
-        transform.position += new Vector3(0, 1, 0); // up one line
-        updateGrid(); // just intersect the last position
+        do {
+            Debug.LogFormat("Updating last group...: {0}", transform.position);
+            transform.position  += new Vector3(0, 1, 0);
+        } while (!isValidGridPos());
+        updateGrid(); // to not overleap invalid groups
         enabled = false; // disable script when dies
         UIController.gameOver(); // active Game Over panel
         //Music.stopMusic(); // stop Music
