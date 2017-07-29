@@ -7,8 +7,45 @@ public class Group : MonoBehaviour {
 
     // time of the last fall, used to auto fall after 
     // time parametrized by `level`
-    private float lastFall = 0;
-    private float lastKeyDown = 0;
+    private float lastFall;
+
+    // last key pressed time, to handle long press behavior
+    private float lastKeyDown;
+
+    // code borrowed from: 
+    // https://forum.unity3d.com/threads/getting-the-bounds-of-the-group-of-objects.70979/
+    public static Bounds getRenderBounds(GameObject obj){
+        var bounds = new  Bounds(Vector3.zero,Vector3.zero);
+        var render = obj.GetComponent<Renderer>();
+        return render != null? render.bounds : bounds;
+    }
+
+    // this too
+    public static Bounds getBounds(GameObject obj){
+        Bounds bounds;
+        Renderer childRender;
+        bounds = getRenderBounds(obj);
+        if((int)bounds.extents.x == 0){
+            bounds = new Bounds(obj.transform.position,Vector3.zero);
+            foreach (Transform child in obj.transform) {
+                childRender = child.GetComponent<Renderer>();
+                if (childRender) {
+                    bounds.Encapsulate(childRender.bounds);
+                }else{
+                    bounds.Encapsulate(getBounds(child.gameObject));
+                }
+            }
+        }
+        return bounds;
+    }
+
+    public Vector3 Center () {
+        return getBounds(gameObject).center;
+    }
+
+    public void AlignCenter() {
+        transform.position += transform.position - Center();
+    }
 
 
     bool isValidGridPos() {
@@ -21,8 +58,8 @@ public class Group : MonoBehaviour {
             }
 
             // Block in grid cell (and not par of same group)?
-            if (Grid.grid[(int)v.x, (int)v.y] != null &&
-                Grid.grid[(int)v.x, (int)v.y].parent != transform) {
+            if (Grid.grid[(int)(v.x), (int)(v.y)] != null &&
+                Grid.grid[(int)(v.x), (int)(v.y)].parent != transform) {
                 return false;
             }
         }
@@ -33,8 +70,8 @@ public class Group : MonoBehaviour {
     // update the grid
     void updateGrid() {
         // Remove old children from grid
-        for (int y = 0; y < Grid.h; y++) {
-            for (int x = 0; x < Grid.w; x++) {
+        for (int y = 0; y < Grid.h; ++y) {
+            for (int x = 0; x < Grid.w; ++x) {
                 if (Grid.grid[x,y] != null &&
                     Grid.grid[x,y].parent == transform) {
                     Grid.grid[x,y] = null;
@@ -64,6 +101,8 @@ public class Group : MonoBehaviour {
         if (!isValidGridPos()) {
             gameOver();
         }
+        lastFall = Time.time;
+        lastKeyDown = Time.time;
 	}
 
     void tryChangePos(Vector3 v) {
@@ -92,13 +131,14 @@ public class Group : MonoBehaviour {
             // It's valid. Update grid... again
             updateGrid();
         } else {
-            // it's not valid. rvert
+            // it's not valid. revert
             transform.position += new Vector3(0, 1, 0);
 
             // Clear filled horizontal lines
             Grid.deleteFullRows();
 
             // Spawn next Group if not died
+            updateGrid();
             FindObjectOfType<Spawner>().spawnNext();
 
             // Disable script
@@ -109,7 +149,8 @@ public class Group : MonoBehaviour {
     
     
     }
-	
+        
+	    
 	// Update is called once per frame
 	void Update () {
 		// Move Left
