@@ -137,8 +137,9 @@ public class Spawner : MonoBehaviour {
 
 *** TODO NextSpawner :docs:
 
+*** TODO UIController :docs:
 
-* IN-PROGRESS Roadmap [88%]
+* IN-PROGRESS Roadmap [83%]
 
 - [X] Criar Layout [3/3]
   - [X] Câmera Principal
@@ -171,4 +172,6 @@ public class Spawner : MonoBehaviour {
   - [X] UI
   - [X] Script
 - [X] Adicionar ação na tecla ESPAÇO para o bloco descer até o final subitamente
-- [X] Modo de reiniciar
+- [X] Modo de reiniciar quando estiver em GameOver
+- [X] Melhor screen de GameOver usando panel
+- [ ] Ajustar blocos na caixa next: inicializar pelo centro não pelo pivô
