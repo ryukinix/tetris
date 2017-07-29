@@ -53,8 +53,8 @@ public class Group : MonoBehaviour {
         Debug.Log("GAME OVER!");
         transform.position += new Vector3(0, 1, 0); // up one line
         updateGrid(); // just intersect the last position
-        enabled = false; // disable script
-        GameOver.finish(); // print Game Over and set finished=true
+        enabled = false; // disable script when dies
+        UIController.gameOver(); // active Game Over panel
         //Music.stopMusic(); // stop Music
     }
 
