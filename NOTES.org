@@ -139,7 +139,7 @@ public class Spawner : MonoBehaviour {
 
 *** TODO UIController :docs:
 
-* IN-PROGRESS Roadmap [83%]
+* IN-PROGRESS Roadmap [84%]
 
 - [X] Criar Layout [3/3]
   - [X] Câmera Principal
@@ -174,4 +174,5 @@ public class Spawner : MonoBehaviour {
 - [X] Adicionar ação na tecla ESPAÇO para o bloco descer até o final subitamente
 - [X] Modo de reiniciar quando estiver em GameOver
 - [X] Melhor screen de GameOver usando panel
-- [ ] Ajustar blocos na caixa next: inicializar pelo centro não pelo pivô
+- [X] Ajustar blocos na caixa next: inicializar pelo centro não pelo pivô
+- [ ] Escalonamento de resolução dinâmico: bordas e grupos (não está funcionando bem)
