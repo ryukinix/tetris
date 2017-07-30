@@ -139,7 +139,7 @@ public class Spawner : MonoBehaviour {
 
 *** TODO UIController :docs:
 
-* IN-PROGRESS Roadmap [92%]
+* IN-PROGRESS Roadmap [100%]
 
 - [X] Criar Layout [3/3]
   - [X] Câmera Principal
@@ -164,9 +164,9 @@ public class Spawner : MonoBehaviour {
   - [X] Inserir BGM com temas aleatórios 1 e 2
 - [X] Score
 - [X] Level
-- [-] Menus [1/3]
-  - [ ] Início
-  - [ ] Pausa
+- [X] Menus [3/3]
+  - [X] Início
+  - [X] Pausa
   - [X] Game over
 - [X] Mostrar próximo bloco [2/2]
   - [X] UI

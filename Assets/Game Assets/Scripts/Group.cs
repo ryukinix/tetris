@@ -15,40 +15,10 @@ public class Group : MonoBehaviour {
     // NOTE: this is just a bug fix
     // if the first non-possible fall is falls==0 so then gameOver is called
     private int falls = 0;
-
-    // code borrowed from: 
-    // https://forum.unity3d.com/threads/getting-the-bounds-of-the-group-of-objects.70979/
-    public static Bounds getRenderBounds(GameObject obj){
-        var bounds = new  Bounds(Vector3.zero,Vector3.zero);
-        var render = obj.GetComponent<Renderer>();
-        return render != null? render.bounds : bounds;
-    }
-
-    // this too
-    public static Bounds getBounds(GameObject obj){
-        Bounds bounds;
-        Renderer childRender;
-        bounds = getRenderBounds(obj);
-        if((int)bounds.extents.x == 0){
-            bounds = new Bounds(obj.transform.position,Vector3.zero);
-            foreach (Transform child in obj.transform) {
-                childRender = child.GetComponent<Renderer>();
-                if (childRender) {
-                    bounds.Encapsulate(childRender.bounds);
-                }else{
-                    bounds.Encapsulate(getBounds(child.gameObject));
-                }
-            }
-        }
-        return bounds;
-    }
-
-    public Vector3 Center () {
-        return getBounds(gameObject).center;
-    }
+   
 
     public void AlignCenter() {
-        transform.position += transform.position - Center();
+        transform.position += transform.position - Utils.Center(gameObject);
     }
 
 
@@ -99,14 +69,15 @@ public class Group : MonoBehaviour {
         updateGrid(); // to not overleap invalid groups
         enabled = false; // disable script when dies
         UIController.gameOver(); // active Game Over panel
+        Highscore.Set(ScoreManager.score); // set highscore
         //Music.stopMusic(); // stop Music
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         lastFall = Time.time;
         lastKeyDown = Time.time;
-	}
+    }
 
     void tryChangePos(Vector3 v) {
         // modify position 
@@ -155,14 +126,16 @@ public class Group : MonoBehaviour {
 
         lastFall = Time.time;
         falls++;
-    
-    
+
+
     }
-        
-	    
-	// Update is called once per frame
-	void Update () {
-		// Move Left
+
+
+    // Update is called once per frame
+    void Update () {
+        if (UIController.isPaused) {
+            return; // don't do nothing
+        }
         if (Input.GetKeyDown(KeyCode.LeftArrow)) {
             tryChangePos(new Vector3(-1, 0, 0));
         } else if (Input.GetKeyDown(KeyCode.RightArrow)) {  // Move right
@@ -179,8 +152,8 @@ public class Group : MonoBehaviour {
                 transform.Rotate(0, 0, 90);
             }
         } else if (Input.GetKeyDown(KeyCode.DownArrow)
-                   || Input.GetKey(KeyCode.DownArrow) && Time.time - lastKeyDown > 0.75 && Time.time - lastFall > .05
-                   || (Time.time - lastFall) >= (float)1 / Mathf.Sqrt(LevelManager.level)) {
+            || Input.GetKey(KeyCode.DownArrow) && Time.time - lastKeyDown > 0.75 && Time.time - lastFall > .05
+            || (Time.time - lastFall) >= (float)1 / Mathf.Sqrt(LevelManager.level)) {
             fallGroup();
         } else if (Input.GetKeyDown(KeyCode.Space)) {
             while (enabled) { // fall until the bottom 
@@ -188,5 +161,5 @@ public class Group : MonoBehaviour {
             }
         }
 
-	}
+    }
 }
