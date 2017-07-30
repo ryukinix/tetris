@@ -139,7 +139,7 @@ public class Spawner : MonoBehaviour {
 
 *** TODO UIController :docs:
 
-* IN-PROGRESS Roadmap [84%]
+* IN-PROGRESS Roadmap [92%]
 
 - [X] Criar Layout [3/3]
   - [X] Câmera Principal
@@ -175,4 +175,5 @@ public class Spawner : MonoBehaviour {
 - [X] Modo de reiniciar quando estiver em GameOver
 - [X] Melhor screen de GameOver usando panel
 - [X] Ajustar blocos na caixa next: inicializar pelo centro não pelo pivô
-- [ ] Escalonamento de resolução dinâmico: bordas e grupos (não está funcionando bem)
+- [X] Escalonamento de resolução dinâmico: bordas e grupos *
+      Isso foi resolvido ajustando apenas a HUD para funcionar bem em todas proporções.

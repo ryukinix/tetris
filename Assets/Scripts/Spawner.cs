@@ -19,7 +19,11 @@ public class Spawner : MonoBehaviour {
 	}
 
     public GameObject createGroup(Vector3 v) {
-        return Instantiate(groups[nextId], v, Quaternion.identity);
+        GameObject group = Instantiate(groups[nextId], v, Quaternion.identity);
+        //group.transform.SetParent(GameObject.FindGameObjectWithTag("Board").transform);
+        //group.transform.position *= canvas.scaleFactor; bug bug bug everywhere
+        // solved in another way: just adjust the UI HUD to scale and keep this shit constant
+        return group;
     }
 
 	// spawnNext group block
