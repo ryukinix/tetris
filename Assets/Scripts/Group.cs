@@ -161,7 +161,7 @@ public class Group : MonoBehaviour {
             tryChangePos(new Vector3(-1, 0, 0));
         } else if (Input.GetKeyDown(KeyCode.RightArrow)) {  // Move right
             tryChangePos(new Vector3(1, 0, 0));
-        } else if (Input.GetKeyDown(KeyCode.UpArrow)) { // Rotate
+        } else if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.tag != "Cube") { // Rotate
             transform.Rotate(0, 0, -90);
 
             // see if valid
