@@ -12,6 +12,10 @@ public class Group : MonoBehaviour {
     // last key pressed time, to handle long press behavior
     private float lastKeyDown;
 
+    // NOTE: this is just a bug fix
+    // if the first non-possible fall is falls==0 so then gameOver is called
+    private int falls = 0;
+
     // code borrowed from: 
     // https://forum.unity3d.com/threads/getting-the-bounds-of-the-group-of-objects.70979/
     public static Bounds getRenderBounds(GameObject obj){
@@ -88,10 +92,10 @@ public class Group : MonoBehaviour {
 
     void gameOver() {
         Debug.Log("GAME OVER!");
-        do {
-            Debug.LogFormat("Updating last group...: {0}", transform.position);
+        while (!isValidGridPos()) {
+            //Debug.LogFormat("Updating last group...: {0}", transform.position);
             transform.position  += new Vector3(0, 1, 0);
-        } while (!isValidGridPos());
+        } 
         updateGrid(); // to not overleap invalid groups
         enabled = false; // disable script when dies
         UIController.gameOver(); // active Game Over panel
@@ -100,10 +104,6 @@ public class Group : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        // default position not valid? then it's game over
-        if (!isValidGridPos()) {
-            gameOver();
-        }
         lastFall = Time.time;
         lastKeyDown = Time.time;
 	}
@@ -141,7 +141,11 @@ public class Group : MonoBehaviour {
             Grid.deleteFullRows();
 
             // Spawn next Group if not died
-            updateGrid();
+            //updateGrid(); // this line is evil
+            // replacing by:
+            if (falls == 0) {
+                gameOver();
+            }
             FindObjectOfType<Spawner>().spawnNext();
 
             // Disable script
@@ -149,6 +153,7 @@ public class Group : MonoBehaviour {
         }
 
         lastFall = Time.time;
+        falls++;
     
     
     }
