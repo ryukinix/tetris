@@ -11,8 +11,8 @@ public class Music : MonoBehaviour {
     public static bool stopped = false; // gamb
 
     void Awake() {
-        DontDestroyOnLoad(this); // to no restart music on a new game
         if (source == null) {
+            DontDestroyOnLoad(this); // to no restart music on a new game
             source = audioSource;
             selectRandomMusic();
             source.Play();
