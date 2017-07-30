@@ -145,8 +145,9 @@ public class Group : MonoBehaviour {
             // replacing by:
             if (falls == 0) {
                 gameOver();
+            } else {
+                FindObjectOfType<Spawner>().spawnNext();
             }
-            FindObjectOfType<Spawner>().spawnNext();
 
             // Disable script
             enabled = false;
