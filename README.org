@@ -1,0 +1,31 @@
+#+AUTHOR: Manoel Vilela
+#+DATE: 2017/07/30
+
+* Description
+
+A simple tetris game made in Unity to learning purposes.
+
+* Play
+
+[[file:Tetris.gif]]
+
+Click here: [[http://manoel.tk/tetris/][Live Version]]
+
+* Author
+- [[https://github.com/ryukinix][Manoel Vilela]]
+
+* Credits & Acknowledge
+Partial logic of the game was done following a great guide
+to implement a Tetris made by [[https://noobtuts.com/unity/2d-tetris-game/][Noobtuts]].
+They have great tutorials.
+
+[[https://www.github.com/rafaelcn][Rafael Campos Nunes]] helped on guidance about Unity
+and partial creation of the Main Menu.
+
+Musics are credited to:
+- Theme-a & theme-b: Original Tetris Authors.
+- Theme-c: Muse and [[https://www.youtube.com/watch?v%3DgGC54sbcYr0][Famitracker - Levi Devis]]
+
+
+* License
+[[file:LICENSE.md][Attribution-NonCommercial-ShareAlike 4.0 International]]
