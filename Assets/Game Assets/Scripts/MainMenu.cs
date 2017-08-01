@@ -41,20 +41,14 @@ public class MainMenu : MonoBehaviour {
 
     public void SelectNewGame() {
         buttons[0].SetActive(true);
+        buttons[1].SetActive(false);
         buttonSelected = 0;
     }
 
     public void SelectExitGame() {
         buttons[1].SetActive(true);
-        buttonSelected = 1;
-    }
-
-    public void DeselectNewGame() {
         buttons[0].SetActive(false);
-    }
-
-    public void DeselectExitGame() {
-        buttons[1].SetActive(false);
+        buttonSelected = 1;
     }
 
     void changePanel(int direction) {
