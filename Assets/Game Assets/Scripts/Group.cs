@@ -11,8 +11,7 @@ public class Group : MonoBehaviour {
 
     // last key pressed time, to handle long press behavior
     private float lastKeyDown;
-
-   
+    private float timeKeyPressed;
 
     public void AlignCenter() {
         transform.position += transform.position - Utils.Center(gameObject);
@@ -102,11 +101,6 @@ public class Group : MonoBehaviour {
     }
 
     void fallGroup() {
-
-        if (Input.GetKeyDown(KeyCode.DownArrow)) {
-            lastKeyDown =  Time.time;
-        }
-
         // modify
         transform.position += new Vector3(0, -1, 0);
 
@@ -130,7 +124,21 @@ public class Group : MonoBehaviour {
 
         lastFall = Time.time;
 
+    }
 
+    // getKey if is pressed now on longer pressed by 0.5 seconds | if that true apply the key each 0.05f while is pressed
+    bool getKey(KeyCode key) {
+        bool keyDown = Input.GetKeyDown(key);
+        bool pressed = Input.GetKey(key) && Time.time - lastKeyDown > 0.5f && Time.time - timeKeyPressed > 0.05f;
+
+        if (keyDown) {
+            lastKeyDown = Time.time;
+        }
+        if (pressed) {
+            timeKeyPressed = Time.time;
+        }
+ 
+        return keyDown || pressed;
     }
 
 
@@ -139,11 +147,11 @@ public class Group : MonoBehaviour {
         if (UIController.isPaused) {
             return; // don't do nothing
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+        if (getKey(KeyCode.LeftArrow)) {
             tryChangePos(new Vector3(-1, 0, 0));
-        } else if (Input.GetKeyDown(KeyCode.RightArrow)) {  // Move right
+        } else if (getKey(KeyCode.RightArrow)) {  // Move right
             tryChangePos(new Vector3(1, 0, 0));
-        } else if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.tag != "Cube") { // Rotate
+        } else if (getKey(KeyCode.UpArrow) && gameObject.tag != "Cube") { // Rotate
             transform.Rotate(0, 0, -90);
 
             // see if valid
@@ -154,9 +162,7 @@ public class Group : MonoBehaviour {
                 // it's not valid. revert
                 transform.Rotate(0, 0, 90);
             }
-        } else if (Input.GetKeyDown(KeyCode.DownArrow)
-            || Input.GetKey(KeyCode.DownArrow) && Time.time - lastKeyDown > 0.75 && Time.time - lastFall > .05
-            || (Time.time - lastFall) >= (float)1 / Mathf.Sqrt(LevelManager.level)) {
+        } else if (getKey(KeyCode.DownArrow) || (Time.time - lastFall) >= (float)1 / Mathf.Sqrt(LevelManager.level)) {
             fallGroup();
         } else if (Input.GetKeyDown(KeyCode.Space)) {
             while (enabled) { // fall until the bottom 
