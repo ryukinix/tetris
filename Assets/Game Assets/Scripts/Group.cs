@@ -12,9 +12,6 @@ public class Group : MonoBehaviour {
     // last key pressed time, to handle long press behavior
     private float lastKeyDown;
 
-    // NOTE: this is just a bug fix
-    // if the first non-possible fall is falls==0 so then gameOver is called
-    private int falls = 0;
    
 
     public void AlignCenter() {
@@ -53,6 +50,10 @@ public class Group : MonoBehaviour {
             } 
         }
 
+        insertOnGrid();
+    }
+
+    void insertOnGrid() {
         // add new children to grid
         foreach (Transform child in transform) {
             Vector2 v = Grid.roundVector2(child.position);
@@ -77,6 +78,14 @@ public class Group : MonoBehaviour {
     void Start () {
         lastFall = Time.time;
         lastKeyDown = Time.time;
+        timeKeyPressed = Time.time;
+        if (isValidGridPos()) {
+            insertOnGrid();
+        } else { 
+            Debug.Log("KILLED ON START");
+            gameOver();
+        }
+
     }
 
     void tryChangePos(Vector3 v) {
@@ -111,21 +120,15 @@ public class Group : MonoBehaviour {
             // Clear filled horizontal lines
             Grid.deleteFullRows();
 
-            // Spawn next Group if not died
-            //updateGrid(); // this line is evil
-            // replacing by:
-            if (falls == 0) {
-                gameOver();
-            } else {
-                FindObjectOfType<Spawner>().spawnNext();
-            }
+
+            FindObjectOfType<Spawner>().spawnNext();
+
 
             // Disable script
             enabled = false;
         }
 
         lastFall = Time.time;
-        falls++;
 
 
     }
