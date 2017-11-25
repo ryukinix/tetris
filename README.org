@@ -1,10 +1,6 @@
 #+AUTHOR: Manoel Vilela
 #+DATE: 2017/07/30
 
-#+BEGIN_HTML
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/jza5upfrcVSndCUAeCgb4ScS/ryukinix/tetris'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/jza5upfrcVSndCUAeCgb4ScS/ryukinix/tetris.svg' /></a>
-#+END_HTML
-
 * Description
 
 A simple tetris game made in Unity to learning purposes.
