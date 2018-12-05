@@ -9,7 +9,7 @@ A simple tetris game made in Unity to learning purposes.
 
 [[file:Tetris.gif]]
 
-Click here: [[http://manoel.tk/tetris/][Live Version]]
+Click here: [[http://lerax.me/tetris/][Live Version]]
 
 * Author
 - [[https://github.com/ryukinix][Manoel Vilela]]
